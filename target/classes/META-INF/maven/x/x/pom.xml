@@ -45,7 +45,7 @@
         <artifactId>ydb</artifactId>
         <version>1.1.9-pg</version>
 		<scope>system</scope>
-         <systemPath>/home/shaonanxu/Ycloud/workspace/x/lib/ydb-1.1.9-pg.jar</systemPath>
+         <systemPath>/home/shaonanxu/Ycloud/workspace/xx/lib/ydb-1.1.9-pg.jar</systemPath>
     </dependency> 
 	<dependency>
     <groupId>c3p0</groupId>

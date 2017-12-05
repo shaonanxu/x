@@ -60,7 +60,7 @@ class YdbHighlightAnalyzer extends Analyzer{
 			}
 			buffer[offset++] = c;
 			if(p == chars.length) {
-				if(c != '?' && c != '*' && c != '^' && c != ' ') {
+				if(c != '?' && c != '*' && c != '^' && c != ' ' && c != '&') {
 					length++;
 				}
 				char[] term = new char[offset];
