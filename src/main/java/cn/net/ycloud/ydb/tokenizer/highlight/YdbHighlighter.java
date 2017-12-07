@@ -4,9 +4,9 @@ import java.io.StringReader;
 
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-import org.apache.lucene.search.highlight.Fragmenter;
 
 import cn.net.ycloud.ydb.tokenizer.highlight.YdbHighlighter0.Formatter;
+import cn.net.ycloud.ydb.tokenizer.highlight.YdbHighlighter0.Fragmenter;
 import cn.net.ycloud.ydb.tokenizer.highlight.YdbHighlighter0.TextFragment;
 
 public class YdbHighlighter {
@@ -55,15 +55,16 @@ public class YdbHighlighter {
 		int block = (summaryLength-hitLength+(contextMinLength-1))/contextMinLength;
 		final int d = block/hitsNum;
 		StringBuilder sb = new StringBuilder();
-		if(d < 0) {
+		if(d <= 0) {
 			int cl = 0;
 			int i = 0;
 			for(;i<tfs.length;i++) {
 				TextFragment tf = tfs[i];
 				sb.append(tf.toString());
+				cl += tf.length();
 				if(cl > summaryLength) break;
 			}
-			if(i != tfs.length) sb.append(split);
+			if(i<tfs.length) sb.append(split);
 		} else {
 			int lastPos = 0;
 			int cl = 0;

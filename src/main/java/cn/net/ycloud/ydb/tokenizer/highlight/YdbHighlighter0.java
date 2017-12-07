@@ -8,10 +8,6 @@ import java.util.Set;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
-import org.apache.lucene.search.highlight.DefaultEncoder;
-import org.apache.lucene.search.highlight.Encoder;
-import org.apache.lucene.search.highlight.Fragmenter;
-import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 
 class YdbHighlighter0 {
 	
@@ -19,7 +15,12 @@ class YdbHighlighter0 {
 	
 	private Fragmenter textFragmenter;
 	private Formatter formatter;
-	private Encoder encoder = new DefaultEncoder();
+	private Encoder encoder = new Encoder() {
+		@Override
+		public String encodeText(String originalText) {
+			return originalText;
+		}
+	};
 	private Set<String> tokenSet;
 	private int hitsNum;
 	
@@ -29,7 +30,7 @@ class YdbHighlighter0 {
 		this.tokenSet = tokenSet;
 	}
 	
-	public final TextFragment[] getBestTextFragments(TokenStream tokenStream, String text, int maxNumFragments) throws IOException, InvalidTokenOffsetsException {
+	public final TextFragment[] getBestTextFragments(TokenStream tokenStream, String text, int maxNumFragments) throws IOException {
 		List<TextFragment> docFrags = new ArrayList<>();
 		StringBuilder newText = new StringBuilder();
 
@@ -51,7 +52,7 @@ class YdbHighlighter0 {
 					next = tokenStream.incrementToken()){
 				
 				if ((offsetAtt.endOffset() > text.length()) || (offsetAtt.startOffset() > text.length())){
-					throw new InvalidTokenOffsetsException("Token "+ termAtt.toString()+" exceeds length of provided text sized "+text.length());
+					throw new IOException("Token "+ termAtt.toString()+" exceeds length of provided text sized "+text.length());
 				}
 				if((tokenGroup.getNumTokens() > 0) && (tokenGroup.isDistinct())){
 					startOffset = tokenGroup.getStartOffset();
@@ -62,6 +63,7 @@ class YdbHighlighter0 {
 						newText.append(encoder.encodeText(text.substring(lastEndOffset, startOffset)));
 					newText.append(markedUpText);
 					lastEndOffset = Math.max(endOffset, lastEndOffset);
+					currentFrag.textLength += tokenGroup.tokenLength();
 					tokenGroup.clear();
 					if (textFragmenter.isNewFragment()) {
 						currentFrag.textEndPos = newText.length();
@@ -71,7 +73,7 @@ class YdbHighlighter0 {
 				}
 				token = termAtt.toString();
 				boolean isHit = this.tokenSet.contains(token);
-				if(isHit && !currentFrag.hit) {
+				if(isHit) {
 					this.hitsNum ++;
 					currentFrag.hit = isHit;
 				}
@@ -89,6 +91,7 @@ class YdbHighlighter0 {
 					newText.append(encoder.encodeText(text.substring(lastEndOffset, startOffset)));
 				newText.append(markedUpText);
 				lastEndOffset = Math.max(lastEndOffset, endOffset);
+				currentFrag.textLength += tokenGroup.tokenLength();
 			}
 
 			if (lastEndOffset < text.length() && text.length() <= DEFAULT_MAX_CHARS_TO_ANALYZE) {
@@ -116,6 +119,7 @@ class YdbHighlighter0 {
 		int textStartPos;
 		int textEndPos;
 		int fragNum;
+		int textLength;
 		boolean hit;
 		
 		public TextFragment(CharSequence markedUpText, int textStartPos, int fragNum) {
@@ -134,11 +138,20 @@ class YdbHighlighter0 {
 		}
 		
 		public int length() {
-			return this.textEndPos - this.textStartPos;
+			return this.textLength;
 		}
 	}
 
 	public interface Formatter {
 		String highlightTerm(String originalText, YdbTokenGroup tokenGroup);
+	}
+	
+	public interface Fragmenter {
+		public void start(String originalText, TokenStream tokenStream);
+		public boolean isNewFragment();
+	}
+	
+	public interface Encoder {
+		String encodeText(String originalText);
 	}
 }

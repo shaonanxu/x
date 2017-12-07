@@ -54,6 +54,10 @@ public class YdbTokenGroup {
 		return offsetAtt.startOffset() >= endOffset;
 	}
 	
+	public int tokenLength() {
+		return this.matchEndOffset - this.matchStartOffset;
+	}
+	
 	public void clear() {
 	    this.numTokens = 0;
 	    this.score = 0;
