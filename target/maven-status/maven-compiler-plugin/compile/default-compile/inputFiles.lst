@@ -2,11 +2,11 @@
 /home/shaonanxu/Ycloud/workspace/x/src/main/java/cn/net/ycloud/utils/YDBHashDictBak.java
 /home/shaonanxu/Ycloud/workspace/x/src/main/java/cn/net/ycloud/ydb/tokenizer/highlight/YdbHighlightTokenizer.java
 /home/shaonanxu/Ycloud/workspace/x/src/main/java/cn/net/ycloud/ydb/tokenizer/YlikeAnalyzer.java
-/home/shaonanxu/Ycloud/workspace/x/src/main/java/cn/net/ycloud/ydb/tokenizer/highlight/YdbQueryScorer.java
 /home/shaonanxu/Ycloud/workspace/x/src/main/java/cn/net/ycloud/ydb/tokenizer/highlight/YdbHighlightAnalyzer.java
 /home/shaonanxu/Ycloud/workspace/x/src/main/java/cn/net/x/example/Indexer.java
 /home/shaonanxu/Ycloud/workspace/x/src/main/java/cn/net/ycloud/utils/YDBHashDict.java
 /home/shaonanxu/Ycloud/workspace/x/src/main/java/cn/net/x/example/TestNormalDick.java
 /home/shaonanxu/Ycloud/workspace/x/src/main/java/cn/net/ycloud/ydb/tokenizer/highlight/YdbHighlighter.java
-/home/shaonanxu/Ycloud/workspace/x/src/main/java/cn/net/ydbmix/svn1/ydb/tokenizer/YlikeTokenizer.java
+/home/shaonanxu/Ycloud/workspace/x/src/main/java/cn/net/ycloud/ydb/tokenizer/highlight/YdbHighlighter0.java
+/home/shaonanxu/Ycloud/workspace/x/src/main/java/cn/net/ycloud/ydb/tokenizer/highlight/YdbTokenGroup.java
 /home/shaonanxu/Ycloud/workspace/x/src/main/java/cn/net/x/example/HdfsIndexer.java
