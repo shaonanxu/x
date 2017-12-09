@@ -34,7 +34,7 @@ class YdbHighlightAnalyzer extends Analyzer{
 		int offset = 0, length = 0;
 		char[] chars = input.toCharArray();
 		int p = 0;
-		char lastC = 0;
+		char lastC = ' ';
 		while(p < chars.length) {
 			char c = chars[p++];
 			if(charType(c) == FLAG) {
@@ -106,8 +106,8 @@ class YdbHighlightAnalyzer extends Analyzer{
 	private int charType(char c) {
 		if(c == '?' || c == '*' || c == '^' || c == ' ')
 			return FLAG;
-		else if (c >= 0x4E00 && c <= 0x9FA5)
-			return HANZI;
+//		else if (c >= 0x4E00 && c <= 0x9FA5)
+//			return HANZI;
 		else 
 			return OTHER;
 	}

@@ -82,7 +82,7 @@ public class TestHighlight {
 				"YDB是一个细粒度的索引,精确粒度的索引。数据即时导入,索引即时生成,通过索引高效定位到相" + 
 				"关数据。YDB";
 		
-		String result = YdbHighlighter.summaryHighlight(query, content, "<pre>", "</pre>", "...", 10, 50);
+		String result = YdbHighlighter.summaryHighlight("标签3", "标签1，标签2，标签3", "<pre>", "</pre>", "...", 10, 50);
 		System.out.println(result);
 		System.out.println(result.length());
 	}
