@@ -161,11 +161,11 @@ public class YdbHighlighter {
 
 		@Override
 		public boolean isNewFragment() {
+			count += termAttr.length();
 			if(count >= length) {
 				count = 0;
 				return true;
 			}
-			count += termAttr.length();
 			return false;
 		}
 	}
