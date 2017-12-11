@@ -23,6 +23,7 @@ class YdbHighlighter0 {
 	};
 	private Set<String> tokenSet;
 	private int hitsNum;
+	private int hitsLength;
 	
 	public YdbHighlighter0(Fragmenter textFragmenter, Formatter formatter, Set<String> tokenSet) {
 		this.textFragmenter = textFragmenter;
