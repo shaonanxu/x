@@ -30,6 +30,7 @@ public class YdbHighlighter {
 			String split, int contextMinLength, int summaryLength) {
 		if(isNull(key) || isNull(content) || contextMinLength > summaryLength) return null;
 		contextMinLength = contextMinLength/2;
+		if(contextMinLength == 0) contextMinLength = 1;
 		SummaryTextFrament stf = new SummaryTextFrament(contextMinLength);
 		YdbHighlightAnalyzer analyzer = new YdbHighlightAnalyzer(key);
 		try {
@@ -51,9 +52,9 @@ public class YdbHighlighter {
 	}
 	
 	private static String summary(TextFragment[] tfs, final int contextMinLength, final int summaryLength, final int hitsNum, String split) {
-		int hitLength = contextMinLength*hitsNum;
+		int hitLength = contextMinLength*hitsNum; // 可以提前精确算出来
 		int block = (summaryLength-hitLength+(contextMinLength-1))/contextMinLength;
-		final int d = block/hitsNum;
+		final int d = block/hitsNum/2;
 		StringBuilder sb = new StringBuilder();
 		if(d <= 0) {
 			int cl = 0;
@@ -62,23 +63,23 @@ public class YdbHighlighter {
 				TextFragment tf = tfs[i];
 				sb.append(tf.toString());
 				cl += tf.length();
-				if(cl > summaryLength) break;
+				if(cl >= summaryLength) break;
 			}
 			if(i<tfs.length) sb.append(split);
 		} else {
-			int lastPos = 0;
+			int lastHitPos = 0;
 			int cl = 0;
 			int i = 0;
 			boolean f = true;
 			do {
 				TextFragment tf = tfs[i];
 				if(tf.hit) {
-					int j = i-lastPos;
+					int j = i-lastHitPos;
 					if(j > d) {
 						j = i-d;
 						sb.append(split);
 					} else {
-						j = lastPos;
+						j = lastHitPos;
 					}
 					for(;j<i;j++) {
 						tf = tfs[j];
@@ -95,16 +96,25 @@ public class YdbHighlighter {
 							break;
 						}
 					}
-					lastPos = i;
+					lastHitPos = i;
 				} else {
 					i++;
 				}
 			} while(f && i<tfs.length);
 			if(i == tfs.length) {
 				if(sb.length() < summaryLength) {
-					for(;lastPos<tfs.length;lastPos++) {
-						sb.append(tfs[lastPos].toString());
+					for(;lastHitPos<tfs.length;lastHitPos++) {
+						TextFragment tf = tfs[lastHitPos];
+						cl+=tf.length();
+						if(cl>summaryLength) {
+							if(lastHitPos < tfs.length-1)
+								sb.append(split);
+							break;
+						}
+						sb.append(tf.toString());
 					}					
+				} else if(lastHitPos < i){
+					sb.append(split);
 				}
 			} else {
 				sb.append(split);
